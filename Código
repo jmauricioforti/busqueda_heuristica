@@ -1,0 +1,34 @@
+def buscar_punto_montaje(brazo_robotico):
+  """
+  Busca el punto de montaje correcto del motor.
+
+  Args:
+    brazo_robotico: El brazo robótico que se va a utilizar.
+
+  Returns:
+    La posición horizontal del punto de montaje correcto.
+  """
+
+  # Comenzar en la posición inicial del brazo robótico.
+  posicion_actual = brazo_robotico.posicion_horizontal()
+
+  # Iterar sobre todas las posiciones posibles del brazo robótico.
+  for posicion_nueva in range(posicion_actual, posicion_actual + 50, 1):
+    # Mover el brazo robótico a la posición nueva.
+    brazo_robotico.mover_horizontalmente(posicion_nueva)
+
+    # Comprobar si el anillo prominente está alineado con la pieza.
+    if brazo_robotico.is_alineado():
+      return posicion_nueva
+
+    # Si el anillo prominente no está alineado, volver a la posición anterior.
+    brazo_robotico.mover_horizontalmente(-posicion_nueva)
+
+  # Si no se ha encontrado el punto de montaje, devolver None.
+  return None
+
+
+# Ejemplo de uso.
+brazo_robotico = BrazoRobotico()
+posicion_montaje = buscar_punto_montaje(brazo_robotico)
+print(posicion_montaje)
