@@ -26,9 +26,3 @@ def buscar_punto_montaje(brazo_robotico):
 
   # Si no se ha encontrado el punto de montaje, devolver None.
   return None
-
-
-# Ejemplo de uso.
-brazo_robotico = BrazoRobotico()
-posicion_montaje = buscar_punto_montaje(brazo_robotico)
-print(posicion_montaje)
