@@ -1,28 +1,32 @@
-def buscar_punto_montaje(brazo_robotico):
+def busqueda_heuristica(estado_inicial, funcion_heuristica):
   """
-  Busca el punto de montaje correcto del motor.
+  Implementa un algoritmo de búsqueda heurística.
 
   Args:
-    brazo_robotico: El brazo robótico que se va a utilizar.
+    estado_inicial: El estado inicial.
+    funcion_heuristica: Una función que estima la distancia entre el estado actual 
+ y el estado objetivo.
 
   Returns:
-    La posición horizontal del punto de montaje correcto.
+    El estado objetivo, o None si no se encuentra.
   """
 
-  # Comenzar en la posición inicial del brazo robótico.
-  posicion_actual = brazo_robotico.posicion_horizontal()
+  pila = [estado_inicial]
+  while pila:
+    estado = pila.pop()
 
-  # Iterar sobre todas las posiciones posibles del brazo robótico.
-  for posicion_nueva in range(posicion_actual, posicion_actual + 50, 1):
-    # Mover el brazo robótico a la posición nueva.
-    brazo_robotico.mover_horizontalmente(posicion_nueva)
+    # Si el estado es el objetivo, devolverlo.
+    if estado == estado_objetivo:
+      return estado
 
-    # Comprobar si el anillo prominente está alineado con la pieza.
-    if brazo_robotico.is_alineado():
-      return posicion_nueva
+    # Evaluar la función heurística para todos los estados sucesores.
+    estados_sucesores = generar_estados_sucesores(estado)
+    for estado_sucesor in estados_sucesores:
+      estimacion_heuristica = funcion_heuristica(estado_sucesor)
 
-    # Si el anillo prominente no está alineado, volver a la posición anterior.
-    brazo_robotico.mover_horizontalmente(-posicion_nueva)
+      # Elegir el estado sucesor con la menor estimación heurística.
+      if estimacion_heuristica < estimacion_heuristica_minima:
+        estimacion_heuristica_minima = estimacion_heuristica
+        estado_a_explorar = estado_sucesor
 
-  # Si no se ha encontrado el punto de montaje, devolver None.
-  return None
+    pila.append(estado_a_explorar)
